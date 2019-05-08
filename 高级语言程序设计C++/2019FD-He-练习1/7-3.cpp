@@ -1,56 +1,57 @@
 #include<iostream>
 using namespace std;
-int main()
-{
-    int row,col,d;
-    cin>>row>>col;
-    int **arr=new int *[row];
-    for(int i=0;i<row;i++)
-    {
-        arr[i]= new int[col];
-    }
-    for(int i=0;i<row;i++)
-    {
-        for(int j=0;j<col;j++)
-        {
-        cin>>arr[i][j];
-        }
-    }
-    cin>>d;
-    for(int i=0;i<d;i++)
-    {
-        int **tmp=new int *[col];
-        for(int i=0;i<col;i++)
-        {
-            tmp[i]= new int[row];
-        }
-        int dst=row-1;
-        for(int i=0;i<row;i++,dst--)
-        {
-            for(int j=0;j<col;j++)
-            {
-                tmp[j][dst]=arr[i][j];
-            }
-        }
-        for(int i=0;i<col;i++)
-        {    
-            for(int j=0;j<row;j++)
-            {
-                arr[i][j]=tmp[i][j];
-            }
-        }
-        int tmpp;
-        tmpp = row;
-        row = col;
-        col = tmpp;
-    }  
-    for(int i=0;i<col;i++)
-    {
-        for(int j=0;j<row;j++)
-        {
-            printf("%d",arr[i][j]);
-        }
-        cout<<endl;
-    }
-    return 0;
+int main(){
+	int n,m,x,i,j;
+	while(cin>>n){
+	cin>>m;
+	int a[n+1][m+1];
+	for(i=1;i<=n;i++){
+		for(j=1;j<=m;j++){
+			cin>>a[i][j];
+		}
+	}
+	cin>>x;
+	x%=4;
+	if(x==0){
+		for(i=1;i<=n;i++){
+			for(j=1;j<=m;j++){
+				cout<<a[i][j];
+				if(j!=m)
+				cout<<" ";
+			}
+			cout<<"\n";
+		}
+	}
+	else if(x==1){
+		for(i=1;i<=m;i++){
+			for(j=n;j>=1;j--){
+				cout<<a[j][i];
+				if(j!=1)
+				cout<<" ";
+			}
+			cout<<"\n";
+		}
+	}
+	else if(x==2){
+		for(i=n;i>=1;i--){
+			for(j=m;j>=1;j--){
+				cout<<a[i][j];
+				if(j!=1)
+				cout<<" ";
+			}
+			cout<<"\n";
+		}
+	}
+	else if(x==3){
+		for(i=m;i>=1;i--){
+			for(j=1;j<=n;j++){
+				cout<<a[j][i];
+				if(j!=n)
+				cout<<" ";
+			}
+			cout<<"\n";
+		}
+	}
+}
+	return 0;
 }

@@ -1,40 +1,18 @@
 #include<iostream>
-#include <string>
-#include <sstream>
+#include<sstream>
+#include<string>
+#include<cmath>
 using namespace std;
-int power(long a, long b)
+long strint(string string1)
 {
-    long val=1;
-    for (long i = 0; i < b; i++)
+    long num = 0;
+    long len =string1.length();
+    for(int i =0;i < len;i++)
     {
-        val*=a;
+        long x = long(string1[i]) - 48;
+        num += x*(pow(2,len-1-i));
     }
-    return val;
-}
-int get_length(long a)
-{
-    long length=0;
-    while(a)
-    {
-        a/=10;
-        length++;
-    }
-    return length;
-}
-int get_value(long a, long i)
-{
-    long value;
-    value = a%power(10,i)/power(10,i-1);
-    return value;
-}
-int bi2dec(long a)
-{
-    long val=0;
-    for (long i = 1; i <=get_length(a); i++)
-    {
-        val+=get_value(a,i)*power(2,i-1);
-    }
-    return val;
+    return num;
 }
 int main()
 {
@@ -53,11 +31,8 @@ int main()
     }
     if(flag)
     {
-        stringstream sstr(string1);
-        long x;
-        sstr >> x;
-        long dec = bi2dec(x);
-        cout << dec;
+        long x = strint(string1);
+        cout << x;
     }
     return 0;
 }
