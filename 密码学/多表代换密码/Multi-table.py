@@ -25,14 +25,14 @@ def Decrypt(clearlist,A,B,n):#解密函数
     for i in range(len(clearlist)):
         clearlist[i] = AtoN(clearlist[i])
     #生成M序列
-    M = np.ones((n,groups))
+    M = np.ones((groups,n))
     index = 0
-    for column in range(groups):
-        for row in range(n):
+    for row in range(groups):
+        for column in range(n):
             M[row][column] = clearlist[index]
             index = index + 1
     index = 0
-    for A_column in range(n):
+    for A_row in range(n):
         for
 def Encrypt(clearlist,A,B,n):#加密函数
     ReA = np.linalg.inv(A)
