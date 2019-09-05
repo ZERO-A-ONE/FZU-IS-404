@@ -20,37 +20,30 @@ while ' ' in clearlist:
 lenth = len(clearlist)
 flag = 0
 offset = 0
-if(lenth%3 == 0):
+# 补位操作
+if (lenth % 4 == 0):
     flag = 0
 else:
     flag = 1
-    offset = 3-lenth%3
+    offset = 4 - lenth % 4
 for i in range(offset):
     clearlist.append('A')
-groups = len(clearlist)/3
 for i in range(len(clearlist)):
     clearlist[i] = AtoN(clearlist[i])
+groups = int(len(clearlist)/4)
 print(clearlist)
 print(offset)
 print(groups)
-lenth = len(clearlist)
-flag = 0
-offset = 0
-# 补位操作
-if (lenth % 3 == 0):
-    flag = 0
-else:
-    flag = 1
-    offset = 3 - lenth % 3
-for i in range(offset):
-    clearlist.append('A')
-groups = int(len(clearlist) / 3)
 # 生成M序列
-M = np.ones((3,groups))
+M = np.ones((groups,4))
 index = 0
-for column in range(groups):
-    for row in range(3):
+for row in range(groups):
+    for column in range(4):
         M[row][column] = clearlist[index]
         index = index + 1
-
 print(M)
+for i in range(groups):
+    tmp = np.ones((4, 1))
+    for row in range(4):
+        tmp[row][0] = M[i][row]
+    print(tmp)
