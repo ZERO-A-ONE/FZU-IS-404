@@ -42,7 +42,7 @@ def Encrypt(clearlist,A,B,n,N):#加密函数
                 tmpp[row][0] = int(tmpp[row][0] + (int(tmp[column][0]) * int(A[row][column])))
             tmpp[row][0] = int((tmpp[row][0]) % N)
         for row in range(n):#实现+
-            tmpp[row][0] = tmpp[row][0] + B[row][0]
+            tmpp[row][0] = (tmpp[row][0] + B[row][0]) % N
         for row in range(n):
             CipherText.append(NtoA(int(tmpp[row][0])))
     if flag == 1:
@@ -113,7 +113,8 @@ if __name__ == '__main__':
     clear = input("Your Text:")
     flag = ' '
     #clear = "WGI FGJ TMR LHH XTH WBX ZPS BRB"
-    #clear = "YOUR PIN NO IS FOUR ONE TWO SIX"
+    #clear = "YOUR PIN NO IS FOUR ONE TWO SIX"Q
+    #clear = "NQXB BTWB DCJJ IJDT XDCF YFSG LYGD MOXN LLGN HAPC QZZQ ZCRG ZEZJ UIEB RRSG NEMV QDJE MXNA IERP XAKM YRBY TQFM NEMV OMEQ"
     #clear = "PLEASE SEND ME THE BOOK, MY CREDIT CARD NO IS SIX ONE TWO ONE THREE EIGHT SIX ZERO ONE SIX EIGHT FOUR NINE SEVEN ZERO TWO"
     clear = list(clear)
     #字符串初始化转换为纯字母序列
