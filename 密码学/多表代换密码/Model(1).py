@@ -32,23 +32,25 @@ def Encrypt(clearlist,A,B,n,N):#加密函数
         for column in range(n):
             M[row][column] = clearlist[index]
             index = index + 1
+    print(M)
     for i in range(groups):
         tmp = np.zeros((n,1))
         tmpp = np.zeros((n,1))
         for row in range(n):
             tmp[row][0] = M[i][row]
         print(tmp)
-        print(A)
         for row in range(n):
             for column in range(n):
                 tmpp[row][0] = int(tmpp[row][0]+(int(tmp[column][0])*int(A[row][column])))
             tmpp[row][0] = int((tmpp[row][0]) % N)
+        print(tmpp)
         for row in range(n):
-            tmpp[row][0] = tmpp[row][0] + B[row][0]
+            tmpp[row][0] = (tmpp[row][0] + B[row][0]) % N
+        print(tmpp)
         for row in range(n):
             CipherText.append(NtoA(int(tmpp[row][0])))
-    for i in range(offset):#消除补位影响
-        del CipherText[-1]
+    #for i in range(offset):#消除补位影响
+        #del CipherText[-1]
     index = 0
     print("CipherText is:",end="")
     for i in range(len(CipherText)):
@@ -70,6 +72,7 @@ def Decrypt(CipherText,A,B,n,N,model):#解密函数
         offset = n - lenth % n
     for i in range(offset):
         CipherText.append('A')
+    print(CipherText)
     groups = int(len(CipherText) / n)
     for i in range(len(CipherText)):
         CipherText[i] = AtoN(CipherText[i])
@@ -80,6 +83,7 @@ def Decrypt(CipherText,A,B,n,N,model):#解密函数
         for column in range(n):
             M[row][column] = CipherText[index]
             index = index + 1
+    print(M)
     if model == 'y':
         A = A
     if model == 'n':
@@ -112,10 +116,11 @@ def Decrypt(CipherText,A,B,n,N,model):#解密函数
 if __name__ == '__main__':
     Model = 0
     flag = ' '
-    clear = "WGI FGJ TMR LHH XTH WBX ZPS BRB"
+    #clear = "WGI FGJ TMR LHH XTH WBX ZPS BRB"
+    #clear = "NQXB BTWB DCJJ IJDT XDCF YFSG LYGD MOXN LLGN HAPC QZZQ ZCRG ZEZJ UIEB RRSG NEMV QDJE MXNA IERP XAKM YRBY TQFM NEMV OME"
     #clear = input("Your Text:")
     #clear = "YOUR PIN NO IS FOUR ONE TWO SIX"
-    #clear = "PLEASE SEND ME THE BOOK, MY CREDIT CARD NO IS SIX ONE TWO ONE THREE EIGHT SIX ZERO ONE SIX EIGHT FOUR NINE SEVEN ZERO TWO"
+    clear = "PLEASE SEND ME THE BOOK, MY CREDIT CARD NO IS SIX ONE TWO ONE THREE EIGHT SIX ZERO ONE SIX EIGHT FOUR NINE SEVEN ZERO TWO"
     clear = list(clear)
     # 字符串初始化转换为纯字母序列
     for i in range(len(clear)):
@@ -123,6 +128,7 @@ if __name__ == '__main__':
             clear[i] = ' '
     while ' ' in clear:
         clear.remove(' ')
+    print(clear)
     Model = int(input("Model (1) is Decrypt,(2) is Encrypt:"))
     n = int(input("n:"))
     N = int(input("N:"))
