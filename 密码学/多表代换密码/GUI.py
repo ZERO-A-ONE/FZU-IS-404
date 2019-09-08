@@ -234,7 +234,10 @@ def newwind(n,m):
         nt2.insert("%d.%d" % (0, int(row)), str2)
     Bt.close()
 def nb1():
-    var = 0
+    fo = open("text.txt", "r+")
+    str = fo.read()
+    tt2.insert(INSERT, str)
+    fo.close()
 def buttonRK():
     if e1.get() != "" and e2.get() != "":
         n = int(e1.get())
