@@ -152,7 +152,6 @@ def S_sub(S_Input):
         col = int(S_Input[index + 1:index + 5], base=2)
         # 得到 result的 单个四位输出
         ret_single = bin(Slist[row * 16 + col])[2:]
-
         while len(ret_single) < 4:
             ret_single = "0" + ret_single
         # 合并单个输出
@@ -241,10 +240,47 @@ def inkey():
                 tmplist.append(chr(random.randint(97, 122)))
         for i in tmplist:
             strr += i
+        keylist = encode(strr)
+        # 补充奇偶校验位
+        for i in range(len(keylist)):
+            keylist[i] = ParityCheck(keylist[i])
+        key_bin = ''.join(keylist)
+        print("Your Key: ", strr)
+        print("Your Binary Key: ", key_bin)
+        print("Your Hex Key: ", hex(int(key_bin, base=2)).upper())
+        return key_bin
     if model == "n":
-        key = input("Please input your key(len = 8): ")
-        strr = key
-    return strr
+        flag = int(input("Please choose your key (1)hex (2)binary (3)string: "))
+        if flag == 3:
+            key = input("Please input your string(len = 8): ")
+            strr = key
+            keylist = encode(strr)
+            # 补充奇偶校验位
+            for i in range(len(keylist)):
+                keylist[i] = ParityCheck(keylist[i])
+            key_bin = ''.join(keylist)
+            print("Your Key: ", key)
+            print("Your Binary Key: ", key_bin)
+            print("Your Hex Key: ", hex(int(key_bin, base=2)).upper())
+            return key_bin
+        if flag == 1:
+            strr = input("Please input your Hex : ")
+            hexx = bin(int(strr, 16))
+            strlist = list(hexx)
+            for i in range(2):
+                del strlist[0]
+            while len(strlist) != 64:
+                strlist.insert(0, '0')
+            key_bin = ''.join(strlist)
+            print("Your Binary Key: ", key_bin)
+            print("Your Hex Key: ", hex(int(key_bin, base=2)).upper())
+            return key_bin
+        if flag == 2:
+            strr = input("Please input your binary : ")
+            key_bin = strr
+            print("Your Binary Key: ", key_bin)
+            print("Your Hex Key: ", hex(int(key_bin, base=2)).upper())
+            return key_bin
 def encode(s):#字符串转二进制
     tmp = []
     for c in s:
@@ -271,9 +307,13 @@ def Encryptmostr(text):
         text += 'A'
     tmplist = encode(text)
     groups = int(len(tmplist) / 8)
-    #补充奇偶校验位
+    #对齐8位
     for i in range(len(tmplist)):
-        tmplist[i] = ParityCheck(tmplist[i])
+        if len(tmplist[i]) != 8:
+            tmpp = ""
+            for j in range(8 - len(tmplist[i])):
+                tmpp += '0'
+            tmplist[i] = tmpp + tmplist[i]
     str_bin = ''.join(tmplist)
     #生成加密分组
     M = np.zeros((groups, 64))
@@ -291,15 +331,7 @@ def Encryptmostr(text):
     print("Your Hex Clear Text: ", hex(int(str_bin, base=2)).upper())
     print("Your Clear Text offset: ", offset)
     print("Your Clear Text groups: ", groups)
-    key = inkey()
-    keylist = encode(key)
-    # 补充奇偶校验位
-    for i in range(len(keylist)):
-        keylist[i] = ParityCheck(keylist[i])
-    key_bin = ''.join(keylist)
-    print("Your Key: ",key)
-    print("Your Binary Key: ",key_bin)
-    print("Your Hex Key: ", hex(int(key_bin, base=2)).upper())
+    key_bin = inkey()
     #打印加密群
     AllCiphertext = ""
     for i in range(groups):
@@ -313,29 +345,96 @@ def Encryptmostr(text):
         print("Ciphertext: ",ciphertext)
     print("Your Binary Ciphertext: ",AllCiphertext)
     print("Your Hex Ciphertext: ", hex(int(AllCiphertext, base=2)).upper())
-
-def Encryptmonum(num):
-    var = 0
+def Encryptmohex(tmplist):
+    str_bin = ''.join(tmplist)
+    groups = int(len(str_bin) / 64)
+    # 生成加密分组
+    M = np.zeros((groups, 64))
+    index = -8
+    for i in range(groups):
+        index += 8
+        strr = ""
+        for j in range(8):
+            strr += tmplist[index + j]
+        for j in range(64):
+            M[i][j] = int(strr[j])
+    print("Your List Clear Text: ", tmplist)
+    print("Your Binary Clear Text: ", str_bin)
+    print("Your Hex Clear Text: ", hex(int(str_bin, base=2)).upper())
+    print("Your Clear Text groups: ", groups)
+    key_bin = inkey()
+    # 打印加密群
+    AllCiphertext = ""
+    for i in range(groups):
+        print("ClearText Group ", i, ": ", end='')
+        tmptext = ""
+        for j in range(64):
+            tmptext += str(int(M[i][j]))
+        print(tmptext)
+        ciphertext = DES(tmptext, key_bin, 2)
+        AllCiphertext += ciphertext
+        print("Ciphertext: ", ciphertext)
+    print("Your Binary Ciphertext: ", AllCiphertext)
+    print("Your Hex Ciphertext: ", hex(int(AllCiphertext, base=2)).upper())
 if __name__ == '__main__':
-    flag = int(input("Please choose Encrypt or Decrypt: (1)Encrypt (2)Decrypt :"))
+    model = 0
+    flag = int(input("Please choose Encrypt or Decrypt (1)Encrypt (2)Decrypt :"))
     if flag == 1:
-        strr = input("Please input your string: ")
-        #消除空格
-        strr = list(strr)
-        while ' ' in strr:
-            strr.remove(' ')
-        str1 = ""
-        for i in strr:
-            str1 += i
-        Encryptmostr(str1)
+        model = int(input("Please choose your Model of Text (1)Hex (2)String :"))
     if flag == 2:
-        strr = input("Please input your string: ")
-        # 消除空格
-        strr = list(strr)
-        while ' ' in strr:
-            strr.remove(' ')
-        str1 = ""
-        for i in strr:
-            str1 += i
-        Encryptmostr(str1)
-
+        model = int(input("Please choose your Model of Text (1)Hex (2)Binary :"))
+    if flag == 1:
+        if model == 1:
+            strr = input("Please input your Hex (0x) :")
+            hexx = bin(int(strr, 16))
+            strlist = list(hexx)
+            for i in range(2):
+                del strlist[0]
+            while len(strlist) != 64:
+                strlist.insert(0, '0')
+            groups = int(len(strlist) / 8)
+            tmplist = []
+            index = -8
+            for i in range(groups):
+                index += 8
+                tlist = ""
+                for j in range(8):
+                    tlist += strlist[index + j]
+                tmplist.append(tlist)
+            Encryptmohex(tmplist)
+        if model == 2:
+            strr = input("Please input your String : ")
+            # 消除空格
+            strr = list(strr)
+            while ' ' in strr:
+                strr.remove(' ')
+            str1 = ""
+            for i in strr:
+                str1 += i
+            Encryptmostr(str1)
+    if flag == 2:
+        if model == 1:
+            strr = input("Please input your Hex : ")
+            hexx = bin(int(strr, 16))
+            strlist = list(hexx)
+            for i in range(2):
+                del strlist[0]
+            while len(strlist) != 64:
+                strlist.insert(0, '0')
+            groups = int(len(strlist) / 8)
+            tmplist = []
+            index = -8
+            for i in range(groups):
+                index += 8
+                tlist = ""
+                for j in range(8):
+                    tlist += strlist[index + j]
+                tmplist.append(tlist)
+            str_bin = ''.join(tmplist)
+            print(str_bin)
+            DecryptmoHex(str_bin)
+        if model == 2:
+            strr = input("Please input your Binary : ")
+            key = input("Please input your key : ")
+            decode_ciphertext = DES(strr, key, 2)
+            print("解密后的明文:             " + hex(int(decode_ciphertext, base=2)).upper())

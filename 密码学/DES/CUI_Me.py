@@ -34,14 +34,19 @@ def createkey(key):
         R0 = ""
         for i in PC_1_LTABLE:
             L0 += key[i - 1]
+        print("L0 : ",L0)
         for i in PC_1_RTABLE:
             R0 += key[i - 1]
+        print("R0 : ",R0)
         assert len(L0) == 28 #if no 28bit error
         assert len(R0) == 28
         Sonkey = []
         for i in range(0, 16):
+            print("Movetimes : ",i)
             L0 = result(L0, Movetimes[i])
             R0 = result(R0, Movetimes[i])
+            print("L0 : ", L0)
+            print("R0 : ", R0)
             mergedKey = L0 + R0
             tempkey = ""
             for j in PC_2_TABLE:
@@ -171,6 +176,9 @@ def DES_ECB(ClearTxt,Keylist):
     (Ln, Rn) = (Rn, Ln)
     re_text = IP_inverse(Ln, Rn)
     return re_text
+def DIYDES(ClearTxt,Key,Model):
+    keylist = createkey(Key)
+
 def Feistel(ClearTxt,Key,Model):
     #Step 1 is CreateKey
     keylist = createkey(Key)
@@ -341,10 +349,6 @@ def Encryptmostr(text):
         print("Ciphertext: ",ciphertext)
     print("Your Binary Ciphertext: ",AllCiphertext)
     print("Your Hex Ciphertext: ", hex(int(AllCiphertext, base=2)).upper())
-def DecryptmoHex(str1):
-    var = 0
-def DecryptmoBin(str1):
-    var = 0
 if __name__ == '__main__':
     model = 0
     flag = int(input("Please choose Encrypt or Decrypt (1)Encrypt (2)Decrypt :"))

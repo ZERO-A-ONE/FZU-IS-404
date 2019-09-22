@@ -171,6 +171,9 @@ def DES_ECB(ClearTxt,Keylist):
     (Ln, Rn) = (Rn, Ln)
     re_text = IP_inverse(Ln, Rn)
     return re_text
+def DIYDES(ClearTxt,Key,Model):
+    keylist = createkey(Key)
+
 def Feistel(ClearTxt,Key,Model):
     #Step 1 is CreateKey
     keylist = createkey(Key)
@@ -341,10 +344,6 @@ def Encryptmostr(text):
         print("Ciphertext: ",ciphertext)
     print("Your Binary Ciphertext: ",AllCiphertext)
     print("Your Hex Ciphertext: ", hex(int(AllCiphertext, base=2)).upper())
-def DecryptmoHex(str1):
-    var = 0
-def DecryptmoBin(str1):
-    var = 0
 if __name__ == '__main__':
     model = 0
     flag = int(input("Please choose Encrypt or Decrypt (1)Encrypt (2)Decrypt :"))

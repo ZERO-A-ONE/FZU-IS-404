@@ -114,6 +114,7 @@ def createSubkey(key):
     retkey = []
     #开始轮置换
     for i in range(0, 16):
+        j = i
         #获取左半边 和 右半边  shift函数用来左移生成轮数
         L0 = shift(L0, Movetimes[i])
         R0 = shift(R0, Movetimes[i])
@@ -125,6 +126,7 @@ def createSubkey(key):
         for i in COMPRESS_MATRIXS:
             tempkey += mergedKey[i - 1]
         assert len(tempkey) == 48
+        print("Your NO.", j, " tempkey :", tempkey)
         #加入生成子密钥
         retkey.append(tempkey)
     return retkey
@@ -192,6 +194,7 @@ def DES (text, key, flag = "0"):
     Rn = InitKeyCode[32:]
     if (flag == "-1") :
         subkeylist = subkeylist[::-1]
+    print("subkeylist",subkeylist)
     for subkey in subkeylist:
         while len(Rn) < 32:
             Rn = "0" + Rn
@@ -201,8 +204,10 @@ def DES (text, key, flag = "0"):
         Rn_expand = E_expend(Rn)
         # 压缩后的密钥与扩展分组异或以后得到48位的数据，将这个数据送入S盒
         S_Input = int(Rn_expand, base=2) ^ int(subkey, base=2)
+        print("S_Input :  ",S_Input)
         # 进行S盒替代
         S_sub_str = S_sub(S_Input)
+        print("S_sub_str :  ", S_sub_str)
         #P盒置换  并且
         #  左、右半部分交换，接着开始另一轮
         (Ln, Rn) = P(Ln, S_sub_str, Rn)
@@ -217,13 +222,18 @@ def DES (text, key, flag = "0"):
 if __name__ == "__main__":
     key = "0001001000110100010101100111100010010001001000110100010101100111"
     Mingwen = "1001100001110110010101000011001000010001010001110010010110000011"
+    reMingwen = "0111110010101110111011000000001001001010111000011010110111001011"
     #打印明文的16进制形式
     print("明文的16进制形式:         " + hex(int(Mingwen, base=2)).upper())
     ciphertext = DES(Mingwen, key)
+    print("加密后的明文:             " + hex(int(ciphertext, base=2)).upper())
+    # 打印明文的16进制形式
+    print("密文的16进制形式:         " + hex(int(key, base=2)).upper())
+    ciphertext = DES(key, key)
     #打印加密后的密文
     print("加密后的密文:             " + hex(int(ciphertext, base=2)).upper())
     falseKey = "1001001000110100010101100111100010010001001000110100010101100110"
-    decode_ciphertext = DES(ciphertext, key, "-1")
+    decode_ciphertext = DES(reMingwen, key, "-1")
     #打印解密后的明文  看是否相同
     print("解密后的明文:             " + hex(int(decode_ciphertext, base=2)).upper())
     decode_ciphertext = DES(ciphertext, falseKey, "-1")
