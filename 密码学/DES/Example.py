@@ -126,7 +126,6 @@ def createSubkey(key):
         for i in COMPRESS_MATRIXS:
             tempkey += mergedKey[i - 1]
         assert len(tempkey) == 48
-        print("Your NO.", j, " tempkey :", tempkey)
         #加入生成子密钥
         retkey.append(tempkey)
     return retkey
@@ -139,22 +138,30 @@ def E_expend(Rn):
     return retRn
 # S盒替代运算
 def S_sub(S_Input):
+    print("Sinput : ",S_Input)
     #从第二位开始的子串  去掉0X
     S_Input = bin(S_Input)[2:]
     while len(S_Input) < 48:
         S_Input = "0" + S_Input
+    print("binS_Input : ", S_Input)
     index = 0
     retstr = ""
+    i = 0
     for Slist in S_MATRIX:
+        print("This is ",i," :")
+        i = i + 1
         # 输入的高低两位做为行数row
         row = int(S_Input[index] + S_Input[index + 5], base=2)
+        print("row : ",row)
         # 中间四位做为列数L
         col = int(S_Input[index + 1:index + 5], base=2)
+        print("col : ",col)
         # 得到 result的 单个四位输出
         ret_single = bin(Slist[row * 16 + col])[2:]
 
         while len(ret_single) < 4:
             ret_single = "0" + ret_single
+        print("ret_single : ",ret_single)
         # 合并单个输出
         retstr += ret_single
         # index + 6 进入下一个六位输入
@@ -163,6 +170,9 @@ def S_sub(S_Input):
     return retstr
 def P(Ln, S_sub_str, oldRn):
     # P 盒置换
+    print("Ln ： ", Ln)
+    print("oldRn ： ", oldRn)
+    print("S_sub_str ： ",S_sub_str)
     tmp = ""
     for i in P_MATRIX:
         tmp += S_sub_str[i - 1]
@@ -174,6 +184,8 @@ def P(Ln, S_sub_str, oldRn):
     assert len(LnNew) == 32
     # 左、右半部分交换，接着开始另一轮
     (Ln, Rn) = (oldRn, LnNew)
+    print("Ln ： ", Ln)
+    print("Rn ： ", Rn)
     return (Ln, Rn)
 def IP_inverse(L16, R16):
     tmp = L16 + R16
@@ -196,18 +208,24 @@ def DES (text, key, flag = "0"):
         subkeylist = subkeylist[::-1]
     print("subkeylist",subkeylist)
     for subkey in subkeylist:
+        print(subkey)
         while len(Rn) < 32:
             Rn = "0" + Rn
         while len(Ln) < 32:
             Ln = "0" + Ln
+
+        print("Ln : " + Ln)
+        print("Rn : " + Rn)
+
         # 对右边进行E-扩展
         Rn_expand = E_expend(Rn)
+        print("Rn_expand : ", Rn_expand)
         # 压缩后的密钥与扩展分组异或以后得到48位的数据，将这个数据送入S盒
         S_Input = int(Rn_expand, base=2) ^ int(subkey, base=2)
-        print("S_Input :  ",S_Input)
+        print("S_Input : ", S_Input)
         # 进行S盒替代
         S_sub_str = S_sub(S_Input)
-        print("S_sub_str :  ", S_sub_str)
+        print("S_sub_str : ", S_sub_str)
         #P盒置换  并且
         #  左、右半部分交换，接着开始另一轮
         (Ln, Rn) = P(Ln, S_sub_str, Rn)
@@ -228,14 +246,14 @@ if __name__ == "__main__":
     ciphertext = DES(Mingwen, key)
     print("加密后的明文:             " + hex(int(ciphertext, base=2)).upper())
     # 打印明文的16进制形式
-    print("密文的16进制形式:         " + hex(int(key, base=2)).upper())
-    ciphertext = DES(key, key)
+    #print("密文的16进制形式:         " + hex(int(key, base=2)).upper())
+    #ciphertext = DES(key, key)
     #打印加密后的密文
-    print("加密后的密文:             " + hex(int(ciphertext, base=2)).upper())
-    falseKey = "1001001000110100010101100111100010010001001000110100010101100110"
-    decode_ciphertext = DES(reMingwen, key, "-1")
+    #print("加密后的密文:             " + hex(int(ciphertext, base=2)).upper())
+    #falseKey = "1001001000110100010101100111100010010001001000110100010101100110"
+    #decode_ciphertext = DES(reMingwen, key, "-1")
     #打印解密后的明文  看是否相同
-    print("解密后的明文:             " + hex(int(decode_ciphertext, base=2)).upper())
-    decode_ciphertext = DES(ciphertext, falseKey, "-1")
+    #print("解密后的明文:             " + hex(int(decode_ciphertext, base=2)).upper())
+    #decode_ciphertext = DES(ciphertext, falseKey, "-1")
     # 打印给定错误的key 解密后的明文  看是否不同
-    print("给定错误的key 解密后的明文:" + hex(int(decode_ciphertext, base=2)).upper())
+    #print("给定错误的key 解密后的明文:" + hex(int(decode_ciphertext, base=2)).upper())

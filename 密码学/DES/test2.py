@@ -174,7 +174,7 @@ def DES_ECB(ClearTxt,Keylist):
 def DIYDES(ClearTxt,Key,Model):
     keylist = createkey(Key)
 
-def Feistel(ClearTxt,Key,Model):
+def Feistel(ClearTxt,Key,Model,F):
     #Step 1 is CreateKey
     keylist = createkey(Key)
     print()
@@ -183,7 +183,7 @@ def Feistel(ClearTxt,Key,Model):
     if Model == 2:
         keylist = keylist[::-1] #INVERSEKEY
     #Step 2 is ClearTxt
-    text = DES_ECB(ClearTxt,keylist)
+    text = F(ClearTxt,keylist)
     return  text
 def encode(s):#字符串转二进制
     tmp = []
@@ -288,7 +288,7 @@ def Encryptmohex(tmplist):
         tmptext = ""
         for j in range(64):
             tmptext += str(int(M[i][j]))
-        ciphertext = Feistel(tmptext, key_bin, 1)
+        ciphertext = Feistel(tmptext, key_bin, 1,DES_ECB)
         AllCiphertext += ciphertext
         print("Ciphertext: ", ciphertext)
     print("Your Binary Ciphertext: ", AllCiphertext)
@@ -339,7 +339,7 @@ def Encryptmostr(text):
         tmptext = ""
         for j in range(64):
             tmptext += str(int(M[i][j]))
-        ciphertext = Feistel(tmptext, key_bin, 1)
+        ciphertext = Feistel(tmptext, key_bin, 1,DES_ECB)
         AllCiphertext += ciphertext
         print("Ciphertext: ",ciphertext)
     print("Your Binary Ciphertext: ",AllCiphertext)

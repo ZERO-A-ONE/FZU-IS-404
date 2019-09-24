@@ -34,10 +34,8 @@ def createkey(key):
         R0 = ""
         for i in PC_1_LTABLE:
             L0 += key[i - 1]
-        print("L0 : ",L0)
         for i in PC_1_RTABLE:
             R0 += key[i - 1]
-        print("R0 : ",R0)
         assert len(L0) == 28 #if no 28bit error
         assert len(R0) == 28
         Sonkey = []
@@ -169,9 +167,14 @@ def DES_ECB(ClearTxt,Keylist):
             Rn = "0" + Rn
         while len(Ln) < 32:
             Ln = "0" + Ln
+        print("Ln : ",Ln)
+        print("Rn : ", Rn)
         Rn_expand = expend(Rn)
+        print("Rn_expand : ",Rn_expand)
         S_Input = int(Rn_expand, base=2) ^ int(key, base=2)
+        print("S_Input : ", S_Input)
         S_sub_str = S_sub(S_Input)
+        print("S_sub_str : ", S_sub_str)
         (Ln, Rn) = P(Ln, S_sub_str, Rn)
     (Ln, Rn) = (Rn, Ln)
     re_text = IP_inverse(Ln, Rn)
