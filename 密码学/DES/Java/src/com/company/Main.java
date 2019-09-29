@@ -1,6 +1,9 @@
 package com.company;
 import java.io.*;
 import java.util.Scanner;
+class yu{
+    yu a = new yu();
+}
 class HextoBin{
     public String thexString;
     public String outStr;
