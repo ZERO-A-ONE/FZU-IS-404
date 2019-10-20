@@ -2,6 +2,15 @@ A=0x01234567
 B=0x89abcdef
 C=0xfedcba98
 D=0x76543210
+def strtonum(strr):
+    tmp = 31
+    tmpnum = 0
+    for i in strr:
+        tmpnum = tmpnum + (ord(i) - ord('0')) * pow(2, tmp)
+        tmp = tmp - 1
+        if tmp < 0:
+            break
+    return  tmpnum
 class delway:
     #四个基础线性函数
     def Fxyz(self,X,Y,Z):
@@ -14,7 +23,21 @@ class delway:
         return Y ^ (X | (~Z))
     #四个数据处理函数Mj表示第M组第j个long数
     def FF(self,a,b,c,d,M,j,s,ti,table):
-
+        tmpnum = strtonum(table[M,j])
+        end = b+((a+self.Fxyz(b,c,d)+tmpnum+ti)<<<s)
+        return end
+    def GG(self,a,b,c,d,M,j,s,ti,table):
+        tmpnum = strtonum(table[M,j])
+        end = b+((a+self.Gxyz(b,c,d)+tmpnum+ti)<<<s)
+        return end
+    def HH(self,a,b,c,d,M,j,s,ti,table):
+        tmpnum = strtonum(table[M,j])
+        end = b+((a+self.Hxyz(b,c,d)+tmpnum+ti)<<<s)
+        return end
+    def II(self,a,b,c,d,M,j,s,ti,table):
+        tmpnum = strtonum(table[M,j])
+        end = b+((a+self.Ixyz(b,c,d)+tmpnum+ti)<<<s)
+        return end
 def Datafill(text):
     if len(text) == 448:
         for i in range(512):

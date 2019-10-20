@@ -105,37 +105,32 @@ def display():
     print("_____________________________________")
 
 def encrypt_file():
-    f = open('./rsa.txt', "r")
-    mess = f.read()
-    f.close()
+    f = input("Please input your message: ")
+    mess = f
     n, e, d = create_keys(1024)
     print("请妥善保管私钥（解密时需要用到）：（n:",n," ,d:",d,")")
     s = ''
+    t = ""
     #s = encrypt(int(mess), e, n)
     print(mess)
     for ch in mess:
         c = chr(encrypt(ord(ch), e, n))
+        t += str(hex(encrypt(ord(ch), e, n)))
         s += c
-   # print(s)
-    f = open("./pass.txt", "w", encoding='utf-8')
-    f.write(str(s))
+    print("Encrypt hex message :",t)
+    print("Encrypt message :"+s)
     print("Encrypt Done!")
 
 def decrypt_file():
-    f = open('./pass.txt', 'rb')
-    mess = f.read().decode('utf-8')
-    f.close()
+    f = input("Please input your encrypt message: ")
+    mess = f
     #n,d = input("私钥：")
     n,d= map(int, input("输入您的私钥（n,d）:").split())
     s = ''
-    #s = decrypt(int(mess), d, n)
-
     for ch in mess:
         c = chr(decrypt(ord(ch), d, n))
         s += c
-    #print(s)
-    f = open("rsa-2.txt", "w", encoding='utf-8')
-    f.write(str(s))
+    print(s)
     print("Decrypt Done!")
 
 if __name__ =='__main__':
