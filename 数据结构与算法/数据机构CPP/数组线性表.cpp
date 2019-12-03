@@ -1,5 +1,5 @@
 #include<iostream>
-#include<stdlib.h >
+#include<stdlib.h>
 using namespace std;
 typedef struct LNode* List;
 const int MAXSIIZE = 1000;

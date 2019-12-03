@@ -1,5 +1,5 @@
 #include<iostream>
-#include<stdlib.h >
+#include<stdlib.h>
 using namespace std;
 typedef struct SNode* Stack;
 const int MAXSIIZE = 1000;
@@ -21,7 +21,7 @@ void Push(int item, Stack S) {
 	Stack Tmpcell;
 	Tmpcell = (Stack)malloc(sizeof(SNode));
 	Tmpcell->Data = item;
-	Tmpcell->Next = S->Next;
+	Tmpcell->Next = S->Next;      
 	S->Next = Tmpcell;
 }
 int Pop(Stack S) {
