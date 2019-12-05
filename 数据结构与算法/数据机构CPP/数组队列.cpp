@@ -17,7 +17,7 @@ void AddQ(Queue PtrQ, int item) {
 	PtrQ->Data[PtrQ->rear] = item;
 }
 int DeleteQ(Queue PtrQ) {
-	if (PtrQ->front = PtrQ->rear) {
+	if (PtrQ->front == PtrQ->rear) {
 		cout << "Max" << endl;
 		return 0;
 	}
